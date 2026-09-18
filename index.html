@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="PWA educativa para preparar y comprender una sesión digital temporal sin conexión.">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Pure Invisibility</title>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Pure Invisibility, inicio">
+        <span class="brand-mark" aria-hidden="true">PI</span>
+        <span><strong>PURE INVISIBILITY</strong><small>OFFLINE SECURITY CENTER</small></span>
+      </a>
+      <div class="top-actions">
+        <button id="installButton" class="button button-quiet" hidden>Install PWA</button>
+        <span id="connectionPill" class="status-pill online"><span class="dot"></span><span>ONLINE</span></span>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero panel" aria-labelledby="modeTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">TEMPORARY DIGITAL ISOLATION</p>
+          <h1 id="modeTitle">Pure Invisibility Mode</h1>
+          <p class="hero-description">Una sesión educativa, local y transparente. Reduce la actividad de red de esta PWA y te guía para preparar una sesión realmente offline.</p>
+          <div id="modeBadge" class="mode-badge ready"><span class="pulse-dot"></span><span>READY</span></div>
+        </div>
+
+        <div class="timer-zone">
+          <div class="timer-ring" id="timerRing" style="--progress: 0">
+            <div class="timer-content">
+              <span class="timer-label">SESSION TIMER</span>
+              <strong id="timerDisplay">15:00</strong>
+              <span id="timerSubtext">Ready to isolate</span>
+            </div>
+          </div>
+
+          <div class="duration-control" id="durationControl">
+            <label for="durationRange">Duración: <strong id="durationValue">15 min</strong></label>
+            <input id="durationRange" type="range" min="1" max="60" value="15" step="1">
+            <div class="quick-times" aria-label="Duraciones rápidas">
+              <button data-minutes="5">5m</button><button data-minutes="15" class="selected">15m</button><button data-minutes="30">30m</button><button data-minutes="60">60m</button>
+            </div>
+          </div>
+
+          <button id="activateButton" class="activate-button"><span class="power-icon" aria-hidden="true">⏻</span><span>ACTIVATE ISOLATION</span></button>
+          <button id="emergencyButton" class="button danger" hidden>■ END SESSION NOW</button>
+        </div>
+      </section>
+
+      <section class="status-grid" aria-label="Estado de seguridad">
+        <article class="panel status-card">
+          <div class="card-heading"><span class="card-icon cyan">⌁</span><div><p class="eyebrow">LIVE MONITOR</p><h2>Network Status</h2></div></div>
+          <dl class="status-list">
+            <div><dt>Browser connection</dt><dd id="browserConnection">Checking…</dd></div>
+            <div><dt>Connection changes</dt><dd id="connectionChanges">0</dd></div>
+            <div><dt>App network access</dt><dd id="appNetworkAccess">Available</dd></div>
+            <div><dt>Last change</dt><dd id="lastNetworkChange">—</dd></div>
+          </dl>
+          <div id="onlineWarning" class="inline-warning" hidden><strong>DEVICE ONLINE</strong><span>El navegador detectó que volvió la conexión. La sesión de la PWA sigue aislada internamente.</span></div>
+        </article>
+
+        <article class="panel status-card">
+          <div class="card-heading"><span class="card-icon violet">◈</span><div><p class="eyebrow">LOCAL PROTECTION</p><h2>Privacy Status</h2></div></div>
+          <ul class="check-list" id="privacyChecklist">
+            <li data-feature="local"><span>✓</span><div><strong>Local-only session data</strong><small>El historial queda en este dispositivo</small></div></li>
+            <li data-feature="cache"><span>✓</span><div><strong>Offline app shell</strong><small>Recursos esenciales cacheados</small></div></li>
+            <li data-feature="requests"><span>○</span><div><strong>Internal requests locked</strong><small>Se activa durante el aislamiento</small></div></li>
+            <li data-feature="external"><span>✓</span><div><strong>No third-party services</strong><small>Sin analítica, backend ni API keys</small></div></li>
+          </ul>
+        </article>
+
+        <article class="panel score-card">
+          <div class="card-heading"><span class="card-icon green">◎</span><div><p class="eyebrow">REAL CAPABILITIES</p><h2>Offline Readiness Score</h2></div></div>
+          <div class="score-layout">
+            <div class="score-gauge" id="scoreGauge" style="--score:0"><strong id="scoreValue">0</strong><span>/100</span></div>
+            <div id="scoreDetails" class="score-details"></div>
+          </div>
+          <p class="microcopy">Se calcula con capacidades reales del navegador: Service Worker, caché, almacenamiento local y disponibilidad offline.</p>
+        </article>
+      </section>
+
+      <section class="two-column">
+        <article class="panel simulator-card">
+          <div class="section-heading">
+            <div><p class="eyebrow">SAFE LAB</p><h2>Isolation Simulator</h2></div>
+            <span class="simulation-label">EDUCATIONAL SIMULATION</span>
+          </div>
+          <p>Observá cómo responde una aplicación al perder conectividad. La demostración es local: no contacta servidores ni ejecuta archivos.</p>
+          <div class="simulator-window">
+            <div class="sim-toolbar"><span></span><span></span><span></span><small>LOCAL DEMO</small></div>
+            <div id="simulatorStage" class="sim-stage online">
+              <div class="sim-cloud">☁</div>
+              <div class="sim-line"></div>
+              <div class="sim-device">▣</div>
+              <strong id="simulatorTitle">Connected application</strong>
+              <small id="simulatorText">Contenido local disponible; funciones de red habilitadas.</small>
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="runSimulation" class="button primary">Run offline simulation</button>
+            <button id="testInternalRequest" class="button button-quiet">Test PWA request</button>
+          </div>
+          <output id="simulationOutput" class="test-output" aria-live="polite">Ready. No external request has been made.</output>
+        </article>
+
+        <article class="panel capabilities-card">
+          <div class="section-heading"><div><p class="eyebrow">TRANSPARENCY</p><h2>Active Controls</h2></div><span class="real-label">REAL WEB APIs</span></div>
+          <div id="activeControls" class="control-list">
+            <div><span class="control-light standby"></span><div><strong>Offline cache</strong><small>Service Worker app shell</small></div><b>STANDBY</b></div>
+            <div><span class="control-light standby"></span><div><strong>Connection monitor</strong><small>Navigator online/offline events</small></div><b>STANDBY</b></div>
+            <div><span class="control-light standby"></span><div><strong>Local event log</strong><small>IndexedDB with local fallback</small></div><b>STANDBY</b></div>
+            <div><span class="control-light standby"></span><div><strong>Internal network lock</strong><small>Requests originating in this PWA</small></div><b>STANDBY</b></div>
+          </div>
+          <div class="scope-note"><strong>Scope:</strong> sólo esta PWA y su Service Worker. No controla el dispositivo ni otras aplicaciones.</div>
+        </article>
+      </section>
+
+      <section class="panel limits-panel">
+        <div class="section-heading"><div><p class="eyebrow">HONEST LIMITS</p><h2>What Pure Invisibility CAN’T do</h2></div><span class="simulation-label">NO SYSTEM ACCESS</span></div>
+        <p>Los navegadores aíslan las PWA por seguridad. Estos controles no existen como permisos web y esta aplicación no pretende tenerlos.</p>
+        <div class="limits-grid">
+          <div><span>Wi‑Fi</span><strong>No puede apagarlo</strong></div>
+          <div><span>Bluetooth</span><strong>No puede desactivarlo</strong></div>
+          <div><span>Mobile data</span><strong>No puede cortarlos</strong></div>
+          <div><span>Other apps</span><strong>No puede controlarlas</strong></div>
+          <div><span>Firewall / OS</span><strong>No puede modificarlos</strong></div>
+          <div><span>Internet identity</span><strong>No vuelve invisible a nadie</strong></div>
+        </div>
+        <div class="ethics-note"><strong>Safety by design.</strong> Pure Invisibility no oculta malware, no evade antivirus, no borra rastros, no oculta identidades, no desactiva protecciones y no interfiere con investigaciones.</div>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="section-heading"><div><p class="eyebrow">ON-DEVICE RECORD</p><h2>Session History</h2></div><button id="clearHistory" class="button button-quiet">Clear history</button></div>
+        <div id="historyEmpty" class="empty-state">Todavía no hay sesiones finalizadas.</div>
+        <div class="table-wrap"><table id="historyTable" hidden><thead><tr><th>Date</th><th>Duration</th><th>Connection changes</th><th>Result</th><th>Report</th></tr></thead><tbody></tbody></table></div>
+      </section>
+
+      <section id="reportPanel" class="panel report-panel" hidden aria-live="polite">
+        <div class="report-icon">✓</div><div><p class="eyebrow">SESSION COMPLETE</p><h2>Security report</h2><p id="reportSummary"></p><div id="reportMetrics" class="report-metrics"></div></div>
+      </section>
+    </main>
+
+    <footer><span>PURE INVISIBILITY · EDUCATIONAL PWA</span><span>All data stays on this device</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
